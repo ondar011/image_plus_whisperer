@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="PSPad editor, www.pspad.com">
+  <title></title>
+  <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="main-element">
+        <div class="top-menu">
+          <form autocomplete="off">
+            <div class="whisperer">
+              <span class="menu-text">Search</span>             
+              <input type="text" id="textInput" >
+            </div>
+          </form>
+        </div>
+
+        <div class="container">
+          <img id="img1" src="img1.jpg">
+          <img id="img2" src="img2.jpg">
+          <img id="img3" src="img3.jpg">
+          <img id="img4" src="img4.jpg">
+          <img id="img5" src="img1.jpg">
+          <img id="img6" src="img5.jpg">
+        </div>
+    </div>
+
+    <script>
+        function whisperer(inp, arr) {
+          var currentFocus;
+          inp.addEventListener("input", function(e) {
+              var a, b, i, val = this.value;
+              closeAllLists();
+              if (!val) { return false;}
+              currentFocus = -1;
+              a = document.createElement("DIV");
+              a.setAttribute("id", this.id + "whisperer-list");
+              a.setAttribute("class", "whisperer-items");
+              this.parentNode.appendChild(a);
+              for (i = 0; i < arr.length; i++) {
+                if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                  b = document.createElement("DIV");
+                  b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+                  b.innerHTML += arr[i].substr(val.length);
+                  b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+                  b.addEventListener("click", function(e) {
+                      inp.value = this.getElementsByTagName("input")[0].value;
+                      closeAllLists();
+                  });
+                  a.appendChild(b);
+                }
+              }
+          });
+          
+          function addActive(x) {
+            if (!x) return false;
+            removeActive(x);
+            if (currentFocus >= x.length) currentFocus = 0;
+            if (currentFocus < 0) currentFocus = (x.length - 1);
+            /*add class "autocomplete-active":*/
+            x[currentFocus].classList.add("whisperer-active");
+          }
+          function removeActive(x) {
+            for (var i = 0; i < x.length; i++) {
+              x[i].classList.remove("whisperer-active");
+            }
+          }
+          function closeAllLists(elmnt) {            
+            var x = document.getElementsByClassName("whisperer-items");
+            for (var i = 0; i < x.length; i++) {
+              if (elmnt != x[i] && elmnt != inp) {
+                x[i].parentNode.removeChild(x[i]);
+              }
+            }
+          }
+          document.addEventListener("click", function (e) {
+              closeAllLists(e.target);
+          });
+        }
+        
+        var mountains = ["Mount Everest", "K2", "Kangchenjunga", "Lhotse", "Makalu", "Cho Oyu", "Dhaulagiri", "Manaslu", "Kanjut Sar", "Labuche Kang"];
+        
+        whisperer(document.getElementById("textInput"), mountains);
+        </script>
+  </body>
+</html>
